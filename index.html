@@ -168,9 +168,15 @@
       flex-direction: column;
       align-items: center;
       text-align: center;
-      padding: 5rem 2rem 4rem;
+      padding: 3rem 3rem 3rem;
       max-width: 860px;
       width: 100%;
+      background: rgba(8, 12, 8, 0.45);
+      backdrop-filter: blur(10px);
+      -webkit-backdrop-filter: blur(10px);
+      border-radius: 2rem;
+      border: 1px solid rgba(255, 255, 255, 0.08);
+      box-shadow: inset 0 1px 0 rgba(255,255,255,0.06);
     }
 
     .hero-eyebrow {
@@ -181,7 +187,7 @@
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: var(--green);
+      color: var(--green-mid);
       margin-bottom: 2rem;
       opacity: 0;
       transform: translateY(16px);
@@ -193,22 +199,21 @@
       font-weight: 800;
       line-height: 1.02;
       letter-spacing: -0.035em;
-      color: var(--ink);
+      color: var(--white);
       opacity: 0;
       transform: translateY(20px);
       animation: fadeUp 0.8s var(--ease-out) 0.35s forwards;
-      text-shadow: 0 1px 4px rgba(250,250,248,0.6);
     }
 
     .hero-h1 em {
       font-style: normal;
-      color: var(--green);
+      color: var(--green-mid);
     }
 
     .hero-body {
       margin-top: 2rem;
       font-size: 1.125rem;
-      color: var(--muted);
+      color: rgba(255, 255, 255, 0.7);
       line-height: 1.7;
       max-width: 52ch;
       opacity: 0;
@@ -257,17 +262,17 @@
       gap: 0.5rem;
       padding: 0.85rem 1.25rem;
       background: transparent;
-      color: var(--muted);
+      color: rgba(255, 255, 255, 0.75);
       font-family: var(--font);
       font-size: 0.9375rem;
       font-weight: 500;
       border-radius: 100px;
-      border: 1px solid var(--border);
+      border: 1px solid rgba(255, 255, 255, 0.3);
       cursor: pointer;
       transition: color 0.25s, border-color 0.25s, transform 0.15s;
     }
 
-    .btn-ghost:hover { color: var(--ink); border-color: var(--ink); }
+    .btn-ghost:hover { color: var(--white); border-color: rgba(255,255,255,0.7); }
     .btn-ghost:active { transform: scale(0.98); }
 
     .hero-stat-row {
@@ -284,11 +289,11 @@
       font-size: 2rem;
       font-weight: 800;
       letter-spacing: -0.04em;
-      color: var(--ink);
+      color: var(--white);
     }
     .hero-stat-label {
       font-size: 0.8125rem;
-      color: var(--muted);
+      color: rgba(255, 255, 255, 0.6);
       margin-top: 0.25rem;
       line-height: 1.4;
       max-width: 18ch;
