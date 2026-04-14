@@ -1,0 +1,1256 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Roots &amp; Ruin — The Case Against Deforestation</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet" />
+  <style>
+    /* ─── Reset & Base ───────────────────────────────────────────────── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --green:       #2d6a4f;
+      --green-mid:   #40916c;
+      --green-light: #d8f3dc;
+      --cream:       #fafaf8;
+      --ink:         #0c0e0b;
+      --ink-mid:     #1f2421;
+      --muted:       #6b7280;
+      --border:      #e5e7eb;
+      --white:       #ffffff;
+
+      --font: 'Outfit', system-ui, sans-serif;
+      --max: 1400px;
+      --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      font-family: var(--font);
+      background: var(--cream);
+      color: var(--ink);
+      overflow-x: hidden;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    img { display: block; max-width: 100%; }
+    a { text-decoration: none; color: inherit; }
+
+    /* ─── Reveal animation ───────────────────────────────────────────── */
+    .reveal {
+      opacity: 0;
+      transform: translateY(32px);
+      transition: opacity 0.8s var(--ease-out), transform 0.8s var(--ease-out);
+    }
+    .reveal.visible { opacity: 1; transform: translateY(0); }
+
+    .reveal-delay-1 { transition-delay: 0.1s; }
+    .reveal-delay-2 { transition-delay: 0.2s; }
+    .reveal-delay-3 { transition-delay: 0.3s; }
+    .reveal-delay-4 { transition-delay: 0.45s; }
+
+    /* ─── Navigation ─────────────────────────────────────────────────── */
+    nav {
+      position: fixed;
+      top: 0; left: 0; right: 0;
+      z-index: 100;
+      padding: 1.25rem 2.5rem;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: rgba(250, 250, 248, 0.85);
+      backdrop-filter: blur(12px);
+      -webkit-backdrop-filter: blur(12px);
+      border-bottom: 1px solid rgba(229, 231, 235, 0.6);
+      transition: box-shadow 0.3s var(--ease-out);
+    }
+
+    nav.scrolled { box-shadow: 0 4px 24px -8px rgba(0,0,0,0.08); }
+
+    .nav-logo {
+      font-size: 1.05rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      color: var(--ink);
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .nav-logo span {
+      width: 8px; height: 8px;
+      border-radius: 50%;
+      background: var(--green);
+      display: inline-block;
+    }
+
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 2.5rem;
+      list-style: none;
+    }
+
+    .nav-links a {
+      font-size: 0.875rem;
+      font-weight: 500;
+      color: var(--muted);
+      transition: color 0.25s;
+    }
+
+    .nav-links a:hover { color: var(--ink); }
+
+    .nav-cta {
+      font-size: 0.875rem;
+      font-weight: 600;
+      padding: 0.5rem 1.25rem;
+      background: var(--ink);
+      color: var(--white);
+      border-radius: 100px;
+      transition: background 0.25s, transform 0.15s;
+    }
+
+    .nav-cta:hover { background: var(--green); }
+    .nav-cta:active { transform: scale(0.98); }
+
+    /* ─── Hero ───────────────────────────────────────────────────────── */
+    .hero {
+      min-height: 100dvh;
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      padding-top: 80px;
+    }
+
+    .hero-content {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      padding: 5rem 5rem 5rem 5vw;
+      max-width: 720px;
+    }
+
+    .hero-eyebrow {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 2rem;
+      opacity: 0;
+      transform: translateY(16px);
+      animation: fadeUp 0.7s var(--ease-out) 0.2s forwards;
+    }
+
+    .hero-eyebrow::before {
+      content: '';
+      display: block;
+      width: 24px;
+      height: 2px;
+      background: var(--green);
+      border-radius: 2px;
+    }
+
+    .hero-h1 {
+      font-size: clamp(3rem, 5.5vw, 5.5rem);
+      font-weight: 800;
+      line-height: 1.02;
+      letter-spacing: -0.035em;
+      color: var(--ink);
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s var(--ease-out) 0.35s forwards;
+    }
+
+    .hero-h1 em {
+      font-style: normal;
+      color: var(--green);
+    }
+
+    .hero-body {
+      margin-top: 2rem;
+      font-size: 1.125rem;
+      color: var(--muted);
+      line-height: 1.7;
+      max-width: 52ch;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s var(--ease-out) 0.5s forwards;
+    }
+
+    .hero-actions {
+      margin-top: 2.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      flex-wrap: wrap;
+      opacity: 0;
+      transform: translateY(20px);
+      animation: fadeUp 0.8s var(--ease-out) 0.65s forwards;
+    }
+
+    .btn-primary {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.75rem;
+      background: var(--green);
+      color: var(--white);
+      font-family: var(--font);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s, transform 0.15s, box-shadow 0.25s;
+    }
+
+    .btn-primary:hover {
+      background: var(--green-mid);
+      box-shadow: 0 8px 24px -8px rgba(45, 106, 79, 0.4);
+    }
+
+    .btn-primary:active { transform: scale(0.98) translateY(1px); }
+
+    .btn-ghost {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 0.85rem 1.25rem;
+      background: transparent;
+      color: var(--muted);
+      font-family: var(--font);
+      font-size: 0.9375rem;
+      font-weight: 500;
+      border-radius: 100px;
+      border: 1px solid var(--border);
+      cursor: pointer;
+      transition: color 0.25s, border-color 0.25s, transform 0.15s;
+    }
+
+    .btn-ghost:hover { color: var(--ink); border-color: var(--ink); }
+    .btn-ghost:active { transform: scale(0.98); }
+
+    .hero-stat-row {
+      margin-top: 4rem;
+      display: flex;
+      gap: 3rem;
+      opacity: 0;
+      animation: fadeUp 0.8s var(--ease-out) 0.8s forwards;
+    }
+
+    .hero-stat-item {}
+    .hero-stat-num {
+      font-size: 2rem;
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      color: var(--ink);
+    }
+    .hero-stat-label {
+      font-size: 0.8125rem;
+      color: var(--muted);
+      margin-top: 0.25rem;
+      line-height: 1.4;
+      max-width: 18ch;
+    }
+
+    .hero-image {
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-image img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transform: scale(1.04);
+      transition: transform 8s ease;
+    }
+
+    .hero-image.loaded img { transform: scale(1); }
+
+    .hero-image::after {
+      content: '';
+      position: absolute;
+      inset: 0;
+      background: linear-gradient(to right, var(--cream) 0%, transparent 18%);
+      pointer-events: none;
+    }
+
+    /* ─── Marquee / Ticker ────────────────────────────────────────────── */
+    .marquee-section {
+      background: var(--ink);
+      padding: 1.1rem 0;
+      overflow: hidden;
+      border-top: 1px solid rgba(255,255,255,0.06);
+      border-bottom: 1px solid rgba(255,255,255,0.06);
+    }
+
+    .marquee-track {
+      display: flex;
+      width: max-content;
+      animation: marquee 28s linear infinite;
+    }
+
+    .marquee-track:hover { animation-play-state: paused; }
+
+    .marquee-item {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+      padding: 0 2.5rem;
+      white-space: nowrap;
+      font-size: 0.8125rem;
+      font-weight: 600;
+      letter-spacing: 0.05em;
+      text-transform: uppercase;
+      color: rgba(255,255,255,0.55);
+    }
+
+    .marquee-item strong { color: var(--white); }
+
+    .marquee-dot {
+      width: 5px; height: 5px;
+      border-radius: 50%;
+      background: var(--green-mid);
+      flex-shrink: 0;
+    }
+
+    @keyframes marquee {
+      from { transform: translateX(0); }
+      to   { transform: translateX(-50%); }
+    }
+
+    /* ─── Section Wrapper ─────────────────────────────────────────────── */
+    section {
+      padding: 8rem 5vw;
+    }
+
+    .inner {
+      max-width: var(--max);
+      margin: 0 auto;
+    }
+
+    .section-label {
+      font-size: 0.75rem;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 1.25rem;
+    }
+
+    .section-h2 {
+      font-size: clamp(2rem, 3.5vw, 3.25rem);
+      font-weight: 800;
+      letter-spacing: -0.03em;
+      line-height: 1.1;
+      color: var(--ink);
+      max-width: 20ch;
+    }
+
+    .section-body {
+      font-size: 1.0625rem;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 58ch;
+      margin-top: 1.25rem;
+    }
+
+    /* ─── What's at Stake ─────────────────────────────────────────────── */
+    .stakes-section { background: var(--white); }
+
+    .stakes-grid {
+      display: grid;
+      grid-template-columns: 2fr 1fr 1fr;
+      grid-template-rows: auto auto;
+      gap: 2px;
+      margin-top: 4rem;
+      border-radius: 1.5rem;
+      overflow: hidden;
+      background: var(--border);
+    }
+
+    .stake-card {
+      background: var(--white);
+      padding: 2.5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      transition: background 0.25s;
+    }
+
+    .stake-card:hover { background: var(--green-light); }
+
+    .stake-card.large {
+      grid-row: span 2;
+      position: relative;
+      min-height: 460px;
+      padding: 0;
+      overflow: hidden;
+    }
+
+    .stake-card.large img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--ease-out);
+    }
+
+    .stake-card.large:hover img { transform: scale(1.04); }
+
+    .stake-card-overlay {
+      position: absolute;
+      bottom: 0; left: 0; right: 0;
+      padding: 2rem;
+      background: linear-gradient(to top, rgba(12,14,11,0.85) 0%, transparent 100%);
+      color: var(--white);
+    }
+
+    .stake-num {
+      font-size: 2.75rem;
+      font-weight: 800;
+      letter-spacing: -0.045em;
+      color: var(--ink);
+    }
+
+    .stake-label {
+      font-size: 0.9375rem;
+      font-weight: 500;
+      color: var(--muted);
+      line-height: 1.5;
+    }
+
+    .stake-icon {
+      width: 40px; height: 40px;
+      border-radius: 10px;
+      background: var(--green-light);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    /* ─── Impact / Zig-Zag ────────────────────────────────────────────── */
+    .impact-section { background: var(--cream); }
+
+    .impact-list {
+      margin-top: 5rem;
+      display: flex;
+      flex-direction: column;
+      gap: 0;
+    }
+
+    .impact-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      border-top: 1px solid var(--border);
+      padding: 4rem 0;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .impact-row:last-child { border-bottom: 1px solid var(--border); }
+
+    .impact-row.flipped .impact-text { order: 2; }
+    .impact-row.flipped .impact-visual { order: 1; }
+
+    .impact-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      color: var(--green);
+      margin-bottom: 1rem;
+    }
+
+    .impact-h3 {
+      font-size: clamp(1.5rem, 2.5vw, 2.25rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      line-height: 1.2;
+      color: var(--ink);
+      margin-bottom: 1.25rem;
+    }
+
+    .impact-p {
+      font-size: 1rem;
+      color: var(--muted);
+      line-height: 1.75;
+      max-width: 50ch;
+    }
+
+    .impact-visual {
+      border-radius: 1.25rem;
+      overflow: hidden;
+      aspect-ratio: 4 / 3;
+      position: relative;
+    }
+
+    .impact-visual img {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      transition: transform 0.6s var(--ease-out);
+    }
+
+    .impact-visual:hover img { transform: scale(1.04); }
+
+    /* ─── Counter Strip ───────────────────────────────────────────────── */
+    .counter-section {
+      background: var(--ink);
+      padding: 6rem 5vw;
+    }
+
+    .counter-grid {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 0;
+    }
+
+    .counter-item {
+      padding: 2rem 2.5rem;
+      border-right: 1px solid rgba(255,255,255,0.08);
+    }
+
+    .counter-item:last-child { border-right: none; }
+
+    .counter-num {
+      font-size: 3.25rem;
+      font-weight: 800;
+      letter-spacing: -0.05em;
+      color: var(--white);
+      line-height: 1;
+    }
+
+    .counter-unit {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--green-mid);
+    }
+
+    .counter-label {
+      font-size: 0.875rem;
+      color: rgba(255,255,255,0.45);
+      margin-top: 0.75rem;
+      line-height: 1.5;
+      max-width: 22ch;
+    }
+
+    /* ─── Solutions ───────────────────────────────────────────────────── */
+    .solutions-section { background: var(--white); }
+
+    .solutions-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: end;
+      margin-bottom: 5rem;
+    }
+
+    .solutions-list {
+      display: flex;
+      flex-direction: column;
+      gap: 1px;
+      background: var(--border);
+      border-radius: 1.25rem;
+      overflow: hidden;
+    }
+
+    .solution-item {
+      background: var(--white);
+      padding: 2rem 2.5rem;
+      display: grid;
+      grid-template-columns: 48px 1fr auto;
+      align-items: center;
+      gap: 1.5rem;
+      cursor: pointer;
+      transition: background 0.2s;
+    }
+
+    .solution-item:hover { background: var(--green-light); }
+    .solution-item:active { transform: scale(0.995); }
+
+    .solution-index {
+      font-size: 0.75rem;
+      font-weight: 700;
+      color: var(--green);
+      font-variant-numeric: tabular-nums;
+    }
+
+    .solution-title {
+      font-size: 1.0625rem;
+      font-weight: 600;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+
+    .solution-sub {
+      font-size: 0.875rem;
+      color: var(--muted);
+      margin-top: 0.2rem;
+    }
+
+    .solution-arrow {
+      width: 32px; height: 32px;
+      border-radius: 50%;
+      border: 1px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: background 0.2s, border-color 0.2s, transform 0.2s;
+      flex-shrink: 0;
+    }
+
+    .solution-item:hover .solution-arrow {
+      background: var(--ink);
+      border-color: var(--ink);
+      transform: rotate(-45deg);
+    }
+
+    .solution-item:hover .solution-arrow svg { stroke: var(--white); }
+
+    /* ─── Organizations ───────────────────────────────────────────────── */
+    .orgs-section { background: var(--cream); }
+
+    .orgs-grid {
+      margin-top: 4rem;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1.5rem;
+    }
+
+    .org-card {
+      padding: 2rem;
+      border: 1px solid var(--border);
+      border-radius: 1rem;
+      background: var(--white);
+      display: flex;
+      align-items: flex-start;
+      gap: 1.25rem;
+      transition: border-color 0.25s, box-shadow 0.25s, transform 0.2s;
+    }
+
+    .org-card:hover {
+      border-color: var(--green);
+      box-shadow: 0 8px 32px -12px rgba(45,106,79,0.2);
+      transform: translateY(-2px);
+    }
+
+    .org-icon {
+      width: 48px; height: 48px;
+      border-radius: 12px;
+      background: var(--green-light);
+      flex-shrink: 0;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .org-name {
+      font-size: 1rem;
+      font-weight: 700;
+      color: var(--ink);
+      letter-spacing: -0.01em;
+    }
+
+    .org-desc {
+      font-size: 0.875rem;
+      color: var(--muted);
+      line-height: 1.6;
+      margin-top: 0.35rem;
+    }
+
+    /* ─── CTA ─────────────────────────────────────────────────────────── */
+    .cta-section {
+      background: var(--ink);
+      padding: 10rem 5vw;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .cta-bg-text {
+      position: absolute;
+      font-size: clamp(6rem, 15vw, 14rem);
+      font-weight: 900;
+      letter-spacing: -0.05em;
+      color: rgba(255,255,255,0.03);
+      top: 50%; left: 50%;
+      transform: translate(-50%, -50%);
+      white-space: nowrap;
+      pointer-events: none;
+      user-select: none;
+    }
+
+    .cta-inner {
+      max-width: var(--max);
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: 1.2fr 1fr;
+      gap: 5rem;
+      align-items: center;
+      position: relative;
+    }
+
+    .cta-h2 {
+      font-size: clamp(2.25rem, 4vw, 3.75rem);
+      font-weight: 800;
+      letter-spacing: -0.04em;
+      line-height: 1.05;
+      color: var(--white);
+    }
+
+    .cta-h2 em {
+      font-style: normal;
+      color: var(--green-mid);
+    }
+
+    .cta-p {
+      font-size: 1rem;
+      color: rgba(255,255,255,0.5);
+      line-height: 1.7;
+      margin-top: 1.25rem;
+    }
+
+    .cta-right {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+    }
+
+    .btn-cta-main {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      background: var(--green);
+      color: var(--white);
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: 600;
+      border-radius: 100px;
+      border: none;
+      cursor: pointer;
+      transition: background 0.25s, box-shadow 0.25s, transform 0.15s;
+      text-align: center;
+    }
+
+    .btn-cta-main:hover {
+      background: var(--green-mid);
+      box-shadow: 0 12px 32px -8px rgba(45,106,79,0.5);
+    }
+
+    .btn-cta-main:active { transform: scale(0.98) translateY(1px); }
+
+    .btn-cta-ghost {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1rem 2rem;
+      background: transparent;
+      color: rgba(255,255,255,0.6);
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: 500;
+      border-radius: 100px;
+      border: 1px solid rgba(255,255,255,0.15);
+      cursor: pointer;
+      transition: border-color 0.25s, color 0.25s, transform 0.15s;
+      text-align: center;
+    }
+
+    .btn-cta-ghost:hover {
+      border-color: rgba(255,255,255,0.4);
+      color: var(--white);
+    }
+
+    .btn-cta-ghost:active { transform: scale(0.98); }
+
+    /* ─── Footer ──────────────────────────────────────────────────────── */
+    footer {
+      background: var(--ink-mid);
+      padding: 3rem 5vw;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      flex-wrap: wrap;
+      gap: 1rem;
+    }
+
+    .footer-logo {
+      font-size: 0.9375rem;
+      font-weight: 700;
+      letter-spacing: -0.01em;
+      color: rgba(255,255,255,0.7);
+    }
+
+    .footer-note {
+      font-size: 0.8125rem;
+      color: rgba(255,255,255,0.3);
+    }
+
+    .footer-note a {
+      color: var(--green-mid);
+      transition: color 0.2s;
+    }
+
+    .footer-note a:hover { color: var(--white); }
+
+    /* ─── Keyframes ───────────────────────────────────────────────────── */
+    @keyframes fadeUp {
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* ─── Scroll Progress Bar ─────────────────────────────────────────── */
+    .progress-bar {
+      position: fixed;
+      top: 0; left: 0;
+      height: 3px;
+      background: var(--green);
+      z-index: 200;
+      transform-origin: left;
+      transform: scaleX(0);
+      transition: transform 0.05s linear;
+    }
+
+    /* ─── Responsive ──────────────────────────────────────────────────── */
+    @media (max-width: 1024px) {
+      .solutions-header { grid-template-columns: 1fr; gap: 2rem; margin-bottom: 3rem; }
+      .counter-grid { grid-template-columns: repeat(2, 1fr); }
+      .counter-item { border-right: none; border-bottom: 1px solid rgba(255,255,255,0.08); }
+      .counter-item:nth-child(odd) { border-right: 1px solid rgba(255,255,255,0.08); }
+      .counter-item:last-child { border-bottom: none; }
+      .stakes-grid { grid-template-columns: 1fr 1fr; }
+      .stake-card.large { grid-row: span 1; min-height: 300px; }
+    }
+
+    @media (max-width: 768px) {
+      nav { padding: 1rem 1.25rem; }
+      .nav-links { display: none; }
+
+      .hero { grid-template-columns: 1fr; }
+      .hero-image { display: none; }
+      .hero-content { padding: 6rem 1.25rem 4rem; max-width: 100%; }
+      .hero-stat-row { gap: 2rem; }
+
+      section { padding: 5rem 1.25rem; }
+      footer { flex-direction: column; align-items: flex-start; padding: 2.5rem 1.25rem; }
+
+      .impact-row { grid-template-columns: 1fr; gap: 2rem; }
+      .impact-row.flipped .impact-text { order: 1; }
+      .impact-row.flipped .impact-visual { order: 2; }
+
+      .stakes-grid { grid-template-columns: 1fr; }
+      .stake-card.large { min-height: 260px; }
+
+      .cta-inner { grid-template-columns: 1fr; gap: 3rem; }
+
+      .counter-grid { grid-template-columns: 1fr 1fr; }
+      .counter-item { padding: 1.5rem; }
+
+      .orgs-grid { grid-template-columns: 1fr; }
+
+      .solution-item { grid-template-columns: 32px 1fr auto; gap: 1rem; }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="progress-bar" id="progressBar"></div>
+
+  <!-- Navigation -->
+  <nav id="mainNav">
+    <a class="nav-logo" href="#">
+      <span></span>
+      Roots &amp; Ruin
+    </a>
+    <ul class="nav-links">
+      <li><a href="#stakes">The Crisis</a></li>
+      <li><a href="#impact">Impact</a></li>
+      <li><a href="#solutions">Solutions</a></li>
+      <li><a href="#act" class="nav-cta">Take Action</a></li>
+    </ul>
+  </nav>
+
+  <!-- Hero -->
+  <section class="hero" style="padding: 0;">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Global Emergency</div>
+      <h1 class="hero-h1">
+        The world loses a forest<br>
+        the size of a<br>
+        <em>football field</em><br>
+        every second.
+      </h1>
+      <p class="hero-body">
+        Deforestation is dismantling the lungs of our planet — wiping out biodiversity, accelerating climate collapse, and displacing millions. The data is brutal. The window to act is closing.
+      </p>
+      <div class="hero-actions">
+        <a href="#act" class="btn-primary">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          Take Action
+        </a>
+        <a href="#stakes" class="btn-ghost">See the data</a>
+      </div>
+      <div class="hero-stat-row">
+        <div class="hero-stat-item">
+          <div class="hero-stat-num">15B</div>
+          <div class="hero-stat-label">Trees cut down each year worldwide</div>
+        </div>
+        <div class="hero-stat-item">
+          <div class="hero-stat-num">46%</div>
+          <div class="hero-stat-label">Of Earth's forests lost since civilisation began</div>
+        </div>
+        <div class="hero-stat-item">
+          <div class="hero-stat-num">80%</div>
+          <div class="hero-stat-label">Of land animal species live in forests</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-image" id="heroImg">
+      <img
+        src="https://picsum.photos/seed/forest-canopy-aerial/900/1100"
+        alt="Aerial view of dense forest canopy"
+        onload="document.getElementById('heroImg').classList.add('loaded')"
+      />
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <div class="marquee-section" aria-hidden="true">
+    <div class="marquee-track">
+      <!-- First set -->
+      <div class="marquee-item"><span class="marquee-dot"></span> <strong>4.7 million hectares</strong> lost per year in tropical forests</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> Amazon has lost <strong>17%</strong> of its cover in 50 years</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> <strong>137 species</strong> go extinct daily due to habitat loss</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> Forests absorb <strong>2.6Gt</strong> of CO2 annually</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> <strong>1.6 billion</strong> people depend on forests for their livelihoods</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> Deforestation causes <strong>11%</strong> of global carbon emissions</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> Congo Basin loses <strong>476,000 ha</strong> per year</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> <strong>50%</strong> of the world's oxygen produced by forests</div>
+      <!-- Duplicate for seamless loop -->
+      <div class="marquee-item"><span class="marquee-dot"></span> <strong>4.7 million hectares</strong> lost per year in tropical forests</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> Amazon has lost <strong>17%</strong> of its cover in 50 years</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> <strong>137 species</strong> go extinct daily due to habitat loss</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> Forests absorb <strong>2.6Gt</strong> of CO2 annually</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> <strong>1.6 billion</strong> people depend on forests for their livelihoods</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> Deforestation causes <strong>11%</strong> of global carbon emissions</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> Congo Basin loses <strong>476,000 ha</strong> per year</div>
+      <div class="marquee-item"><span class="marquee-dot"></span> <strong>50%</strong> of the world's oxygen produced by forests</div>
+    </div>
+  </div>
+
+  <!-- What's at Stake -->
+  <section class="stakes-section" id="stakes">
+    <div class="inner">
+      <p class="section-label reveal">The Stakes</p>
+      <h2 class="section-h2 reveal reveal-delay-1">A living system being erased in real time</h2>
+      <p class="section-body reveal reveal-delay-2">Forests are not simply scenery. They are the infrastructure of life on Earth — climate regulators, water systems, gene banks, and home to the majority of all species.</p>
+
+      <div class="stakes-grid">
+        <div class="stake-card large reveal">
+          <img src="https://picsum.photos/seed/rainforest-mist/600/800" alt="Misty rainforest interior" loading="lazy" />
+          <div class="stake-card-overlay">
+            <div style="font-size:0.75rem; font-weight:600; letter-spacing:0.1em; text-transform:uppercase; color:rgba(255,255,255,0.6); margin-bottom:0.5rem;">Amazon Rainforest</div>
+            <div style="font-size:1.375rem; font-weight:700; line-height:1.3;">The planet's most biodiverse biome — and the most threatened.</div>
+          </div>
+        </div>
+        <div class="stake-card reveal reveal-delay-1">
+          <div class="stake-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12M12 12C12 12 9 9 6 9C4 9 2 10.5 2 12.5C2 15 4 17 6 17C9 17 12 15 12 12ZM12 12C12 12 15 9 18 9C20 9 22 10.5 22 12.5C22 15 20 17 18 17C15 17 12 15 12 12Z"/></svg>
+          </div>
+          <div class="stake-num">3.2T</div>
+          <div class="stake-label">Trees currently on Earth — down from 5.6 trillion before agriculture</div>
+        </div>
+        <div class="stake-card reveal reveal-delay-2">
+          <div class="stake-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><path d="M12 8v4l3 3"/></svg>
+          </div>
+          <div class="stake-num">2.4s</div>
+          <div class="stake-label">Average time between each hectare of forest lost, globally</div>
+        </div>
+        <div class="stake-card reveal reveal-delay-1">
+          <div class="stake-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72c.127.96.361 1.903.7 2.81a2 2 0 0 1-.45 2.11L7.91 9.91a16 16 0 0 0 6.16 6.16l.91-.91a2 2 0 0 1 2.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0 1 22 16.92z"/></svg>
+          </div>
+          <div class="stake-num">1.6B</div>
+          <div class="stake-label">Indigenous people whose cultures, food, and water depend on intact forests</div>
+        </div>
+        <div class="stake-card reveal reveal-delay-2">
+          <div class="stake-icon">
+            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 6 13.5 15.5 8.5 10.5 1 18"/><polyline points="17 6 23 6 23 12"/></svg>
+          </div>
+          <div class="stake-num">+1.5°C</div>
+          <div class="stake-label">Additional warming modelled if remaining tropical forests are cleared</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Counter Strip -->
+  <div class="counter-section">
+    <div class="counter-grid">
+      <div class="counter-item reveal">
+        <div class="counter-num">10<span class="counter-unit">M</span></div>
+        <div class="counter-label">Hectares of forest lost each year — an area larger than Portugal</div>
+      </div>
+      <div class="counter-item reveal reveal-delay-1">
+        <div class="counter-num">17<span class="counter-unit">%</span></div>
+        <div class="counter-label">Of global greenhouse gas emissions caused by deforestation</div>
+      </div>
+      <div class="counter-item reveal reveal-delay-2">
+        <div class="counter-num">137<span class="counter-unit">+</span></div>
+        <div class="counter-label">Species driven to extinction every single day</div>
+      </div>
+      <div class="counter-item reveal reveal-delay-3">
+        <div class="counter-num">30<span class="counter-unit">%</span></div>
+        <div class="counter-label">Of Earth's land surface still covered by forest — down from 57%</div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Impact -->
+  <section class="impact-section" id="impact">
+    <div class="inner">
+      <p class="section-label reveal">Cascading Consequences</p>
+      <h2 class="section-h2 reveal reveal-delay-1">When forests fall, everything connected to them falls too.</h2>
+
+      <div class="impact-list">
+
+        <div class="impact-row reveal">
+          <div class="impact-text">
+            <div class="impact-tag">Climate</div>
+            <h3 class="impact-h3">Forests absorb the carbon we emit. Without them, we're in freefall.</h3>
+            <p class="impact-p">Tropical forests alone store over 250 billion tonnes of carbon. When a tree is burned or left to rot after logging, that carbon re-enters the atmosphere — accelerating the warming that is already reshaping weather patterns, sea levels, and ecosystems worldwide.</p>
+          </div>
+          <div class="impact-visual">
+            <img src="https://picsum.photos/seed/forest-fire-smoke/700/530" alt="Forest burning with smoke rising" loading="lazy" />
+          </div>
+        </div>
+
+        <div class="impact-row flipped reveal">
+          <div class="impact-text">
+            <div class="impact-tag">Biodiversity</div>
+            <h3 class="impact-h3">Half of Earth's species live in forests. Their extinction is permanent.</h3>
+            <p class="impact-p">Over 50% of the world's plant and animal species inhabit tropical forests, most yet undiscovered. As canopy cover shrinks, habitats fragment and species that cannot adapt fast enough vanish — taking with them genetic diversity, ecosystem services, and potential medicines we haven't found yet.</p>
+          </div>
+          <div class="impact-visual">
+            <img src="https://picsum.photos/seed/orangutan-forest/700/530" alt="Wildlife in forest habitat" loading="lazy" />
+          </div>
+        </div>
+
+        <div class="impact-row reveal">
+          <div class="impact-text">
+            <div class="impact-tag">Water</div>
+            <h3 class="impact-h3">Forests are the source of most freshwater. We are cutting off the tap.</h3>
+            <p class="impact-p">Trees regulate the water cycle — drawing moisture from the ground and releasing it back into the atmosphere as rain. Deforestation in headwater regions causes rivers to shrink and rainfall patterns to shift, threatening the agricultural systems and drinking water of billions of people hundreds of kilometres away.</p>
+          </div>
+          <div class="impact-visual">
+            <img src="https://picsum.photos/seed/forest-river-aerial/700/530" alt="Aerial view of river through forest" loading="lazy" />
+          </div>
+        </div>
+
+        <div class="impact-row flipped reveal">
+          <div class="impact-text">
+            <div class="impact-tag">People</div>
+            <h3 class="impact-h3">Forest communities lose their homes, food, and futures — first.</h3>
+            <p class="impact-p">Indigenous and forest-dependent communities, who have stewarded these ecosystems for millennia, bear the harshest immediate consequences. Land-grabs by agricultural and extractive industries displace millions, erasing cultures and knowledge systems that cannot be recovered. They are the frontline — and they are fighting back.</p>
+          </div>
+          <div class="impact-visual">
+            <img src="https://picsum.photos/seed/indigenous-forest-community/700/530" alt="Forest community people" loading="lazy" />
+          </div>
+        </div>
+
+      </div>
+    </div>
+  </section>
+
+  <!-- Solutions -->
+  <section class="solutions-section" id="solutions">
+    <div class="inner">
+      <div class="solutions-header">
+        <div>
+          <p class="section-label reveal">What Works</p>
+          <h2 class="section-h2 reveal reveal-delay-1">The problem is solvable. The tools exist. What's missing is will.</h2>
+        </div>
+        <p class="section-body reveal" style="margin-top:0; align-self:end;">Deforestation is not inevitable. Countries, communities, and companies have already demonstrated that forests can be protected, restored, and governed fairly — at scale.</p>
+      </div>
+
+      <div class="solutions-list">
+        <div class="solution-item reveal">
+          <span class="solution-index">01</span>
+          <div>
+            <div class="solution-title">Indigenous Land Rights</div>
+            <div class="solution-sub">Legally recognising Indigenous territories is the single most effective forest protection strategy known.</div>
+          </div>
+          <div class="solution-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+        <div class="solution-item reveal reveal-delay-1">
+          <span class="solution-index">02</span>
+          <div>
+            <div class="solution-title">Supply Chain Transparency</div>
+            <div class="solution-sub">Mandating deforestation-free certification for soy, palm oil, beef, timber, and cocoa eliminates demand for cleared land.</div>
+          </div>
+          <div class="solution-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+        <div class="solution-item reveal reveal-delay-2">
+          <span class="solution-index">03</span>
+          <div>
+            <div class="solution-title">REDD+ Finance</div>
+            <div class="solution-sub">Paying forest nations for carbon sequestration makes standing forests economically competitive with clearing them.</div>
+          </div>
+          <div class="solution-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+        <div class="solution-item reveal reveal-delay-3">
+          <span class="solution-index">04</span>
+          <div>
+            <div class="solution-title">Forest Restoration at Scale</div>
+            <div class="solution-sub">The Bonn Challenge commits 61 nations to restoring 350 million hectares by 2030 — restoring watersheds and corridors.</div>
+          </div>
+          <div class="solution-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+        <div class="solution-item reveal reveal-delay-4">
+          <span class="solution-index">05</span>
+          <div>
+            <div class="solution-title">Satellite Monitoring &amp; Enforcement</div>
+            <div class="solution-sub">Near real-time forest monitoring via Global Forest Watch makes illegal clearing visible within days — enabling faster prosecution.</div>
+          </div>
+          <div class="solution-arrow">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#6b7280" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Organizations -->
+  <section class="orgs-section" id="act">
+    <div class="inner">
+      <p class="section-label reveal">Where to Direct Support</p>
+      <h2 class="section-h2 reveal reveal-delay-1">Organisations doing the work on the ground.</h2>
+      <p class="section-body reveal reveal-delay-2">These are evidence-led, field-proven organisations with transparent financials and measurable impact records.</p>
+
+      <div class="orgs-grid">
+        <div class="org-card reveal">
+          <div class="org-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/><path d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z"/></svg>
+          </div>
+          <div>
+            <div class="org-name">Rainforest Alliance</div>
+            <div class="org-desc">Certification and advocacy that makes sustainable land use economically viable for farmers, foresters, and businesses globally.</div>
+          </div>
+        </div>
+        <div class="org-card reveal reveal-delay-1">
+          <div class="org-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+          </div>
+          <div>
+            <div class="org-name">Amazon Conservation Association</div>
+            <div class="org-desc">Protecting millions of acres in the western Amazon through science, community collaboration, and Indigenous partnership.</div>
+          </div>
+        </div>
+        <div class="org-card reveal reveal-delay-2">
+          <div class="org-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22V12M12 12C12 12 9 9 6 9C4 9 2 10.5 2 12.5C2 15 4 17 6 17C9 17 12 15 12 12ZM12 12C12 12 15 9 18 9C20 9 22 10.5 22 12.5C22 15 20 17 18 17C15 17 12 15 12 12Z"/></svg>
+          </div>
+          <div>
+            <div class="org-name">Global Forest Watch</div>
+            <div class="org-desc">Free, open-access satellite monitoring exposing deforestation in near real-time — arming journalists, governments, and communities.</div>
+          </div>
+        </div>
+        <div class="org-card reveal reveal-delay-3">
+          <div class="org-icon">
+            <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="#2d6a4f" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"/></svg>
+          </div>
+          <div>
+            <div class="org-name">Survival International</div>
+            <div class="org-desc">The world's leading Indigenous rights organisation — defending the lands, lives, and futures of tribal peoples who are nature's best guardians.</div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA -->
+  <section class="cta-section" style="padding-top:10rem; padding-bottom:10rem;">
+    <div class="cta-bg-text">ACT NOW</div>
+    <div class="cta-inner">
+      <div class="reveal">
+        <h2 class="cta-h2">The forests<br>cannot wait for <em>a perfect moment.</em></h2>
+        <p class="cta-p">Every year of delay costs an irreplaceable piece of the living world. The science is unambiguous. The solutions are available. The question is whether enough people choose to demand change — and change their own behaviour — before the window closes.</p>
+      </div>
+      <div class="cta-right reveal reveal-delay-2">
+        <a href="https://www.rainforest-alliance.org" target="_blank" rel="noopener" class="btn-cta-main">
+          Support the Rainforest Alliance
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M5 12h14M12 5l7 7-7 7"/></svg>
+        </a>
+        <a href="https://www.globalforestwatch.org" target="_blank" rel="noopener" class="btn-cta-ghost">
+          Explore Global Forest Watch
+        </a>
+        <a href="https://www.survivalinternational.org" target="_blank" rel="noopener" class="btn-cta-ghost">
+          Stand with Indigenous Communities
+        </a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-logo">Roots &amp; Ruin</div>
+    <div class="footer-note">
+      Built to raise awareness. Data sourced from
+      <a href="https://www.globalforestwatch.org" target="_blank" rel="noopener">Global Forest Watch</a>,
+      <a href="https://www.fao.org" target="_blank" rel="noopener">FAO</a>, and
+      <a href="https://www.ipbes.net" target="_blank" rel="noopener">IPBES</a>.
+    </div>
+  </footer>
+
+  <script>
+    // ── Scroll progress bar ──────────────────────────────────────────
+    const progressBar = document.getElementById('progressBar');
+    window.addEventListener('scroll', () => {
+      const scrolled = window.scrollY;
+      const maxScroll = document.body.scrollHeight - window.innerHeight;
+      const pct = scrolled / maxScroll;
+      progressBar.style.transform = `scaleX(${pct})`;
+    }, { passive: true });
+
+    // ── Nav shadow on scroll ─────────────────────────────────────────
+    const nav = document.getElementById('mainNav');
+    window.addEventListener('scroll', () => {
+      nav.classList.toggle('scrolled', window.scrollY > 40);
+    }, { passive: true });
+
+    // ── Intersection observer: reveal ────────────────────────────────
+    const reveals = document.querySelectorAll('.reveal');
+    const observer = new IntersectionObserver(
+      (entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.classList.add('visible');
+            observer.unobserve(entry.target);
+          }
+        });
+      },
+      { threshold: 0.12, rootMargin: '0px 0px -40px 0px' }
+    );
+    reveals.forEach(el => observer.observe(el));
+  </script>
+</body>
+</html>
