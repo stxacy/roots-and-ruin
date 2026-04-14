@@ -131,15 +131,16 @@
     /* Full-bleed video background */
     .hero-video {
       position: absolute;
-      top: 0; left: 0;
-      width: 100%;
-      height: 100%;
+      top: 50%;
+      left: 50%;
+      width: 115%;
+      height: 115%;
       object-fit: cover;
       object-position: center center;
       pointer-events: none;
       z-index: 0;
-      transform: translate3d(0, 0, 0);
-      -webkit-transform: translate3d(0, 0, 0);
+      transform: translate3d(-50%, -50%, 0);
+      -webkit-transform: translate3d(-50%, -50%, 0);
       will-change: transform;
       backface-visibility: hidden;
       -webkit-backface-visibility: hidden;
@@ -891,7 +892,7 @@
 
   <!-- Hero -->
   <section class="hero">
-    <video class="hero-video" autoplay muted loop playsinline>
+    <video class="hero-video" id="heroVid" autoplay muted loop playsinline>
       <source src="globe3dvid.mp4" type="video/mp4" />
     </video>
     <div class="hero-mask" aria-hidden="true"></div>
@@ -1228,6 +1229,12 @@
   </footer>
 
   <script>
+    // ── Hero video: slow playback so globe stays centred longer ─────
+    const heroVid = document.getElementById('heroVid');
+    const setRate = () => { heroVid.playbackRate = 0.4; };
+    heroVid.addEventListener('loadedmetadata', setRate);
+    heroVid.addEventListener('play', setRate);
+
     // ── Scroll progress bar ──────────────────────────────────────────
     const progressBar = document.getElementById('progressBar');
     window.addEventListener('scroll', () => {
